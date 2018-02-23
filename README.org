@@ -1,0 +1,28 @@
+* Ferret
+This repository contains the code pertaining to the model fitting in *PAPER_CITATION*
+** Requirements
+This code works with =rstan_2.17.2= and possibly other versions too.
+** Demonstration
+A demonstration can be run with:
+#+BEGIN_SRC 
+$ ./demo-within-host.sh
+#+END_SRC 
+The results will appear in =out/demo=.
+** Structure
+#+BEGIN_SRC
+.
+├── README.org
+├── demo-within-host.sh
+├── in
+│   └── demo.xlsx
+├── main.R
+├── out
+│   ├── between-host
+│   ├── demo
+│   └── within-host
+├── run-between-host.sh
+├── run-within-host.sh
+└── src
+    ├── between-host
+    └── within-host
+#+END_SRC
