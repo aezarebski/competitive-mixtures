@@ -80,6 +80,10 @@ get_args <- function() {
             "--out",
             "The RDS file to write the fit to."
         ),
+        file_option(
+            "--ic",
+            "The RDS file to use as an initial condition."
+        ),
         make_option(
             c("--relax"),
             type = "numeric",
@@ -110,7 +114,7 @@ main <- function() {
         fit_env$DUMP_FILE <- args$dump
         fit_env$MODEL_FILE <- args$model
         fit_env$OUT_FILE <- args$out
-        fit_env$IC_FILE <- "NA"
+        fit_env$IC_FILE <- args$ic
         source("src/within-host/fit.R", local = fit_env)
     } else if (args$within_view) {
         view_env <- new.env()

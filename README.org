@@ -1,28 +1,20 @@
-* Ferret
+* Competitive mixtures
 This repository contains the code pertaining to the model fitting in *PAPER_CITATION*
+** Code structure
+The =main.R= script provides a convenient interface to the rest of the code.
+If you are only interested in using the existing code, you only need to learn how to run =main.R=.
+Run =Rscript main.R --help= for details about using =main.R=.
+
+There are some example shell script showing how to run an analysis. 
+- =run-between-host-d197n.sh= runs the full analysis for the between-host model for the D197N data set.
+- =run-between-host-h273y.sh= runs the full analysis for the between-host model for the H273Y data set.
+- =demo-within-host.sh= fits the within-host model to a subset of the data.
+- =run-within-host-d197n.sh= runs the full analysis for the within-host model for the D197N data set.
+- =run-within-host-h273y.sh= runs the full analysis for the within-host model for the H273Y data set.
+
+The input data for these computations is in the =in= directory and is part of the repository.
+The output of these computations will appear in the =out= directory which is ignored by git.
 ** Requirements
-This code works with =rstan_2.17.2= and possibly other versions too.
-** Demonstration
-A demonstration can be run with:
-#+BEGIN_SRC 
-$ ./demo-within-host.sh
-#+END_SRC 
-The results will appear in =out/demo=.
-** Structure
-#+BEGIN_SRC
-.
-├── README.org
-├── demo-within-host.sh
-├── in
-│   └── demo.xlsx
-├── main.R
-├── out
-│   ├── between-host
-│   ├── demo
-│   └── within-host
-├── run-between-host.sh
-├── run-within-host.sh
-└── src
-    ├── between-host
-    └── within-host
-#+END_SRC
+This code works with =rstan_2.17.2= and possibly later versions too.
+Note that the part of the post-processing for the within-host model relies on functions in the Rstan interface that appears in version 2.17.0.
+However, you should still be able to fit the within-host model with earlier versions.

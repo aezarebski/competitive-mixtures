@@ -6,6 +6,7 @@
 #' OUT_FILE
 #'
 
+library(dplyr)
 library(rstan)
 rstan_options(auto_write = TRUE)
 
