@@ -7,10 +7,8 @@ Run =Rscript main.R --help= for details about using =main.R=.
 
 There are some example shell script showing how to run an analysis. 
 - =run-between-host-d197n.sh= runs the full analysis for the between-host model for the D197N data set.
-- =run-between-host-h273y.sh= runs the full analysis for the between-host model for the H273Y data set.
 - =demo-within-host.sh= fits the within-host model to a subset of the data.
 - =run-within-host-d197n.sh= runs the full analysis for the within-host model for the D197N data set.
-- =run-within-host-h273y.sh= runs the full analysis for the within-host model for the H273Y data set.
 
 The input data for these computations is in the =in= directory and is part of the repository.
 The output of these computations will appear in the =out= directory which is ignored by git.
