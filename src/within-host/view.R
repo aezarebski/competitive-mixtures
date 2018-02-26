@@ -13,7 +13,8 @@ obs_array <- readRDS(gsub(".dump", "obs_array.rds", DUMP_FILE))
 fit <- readRDS(FIT_FILE)
 sol <- fit$par$sol
 g_model_fit <- plot_model_solution(sol, obs_array)
-verbose_ggsave(g_model_fit, sprintf("%s/model_fit.pdf", OUT_DIR))
+fit_output_file <- gsub(".rds", ".pdf", gsub("fit", "model-fit", FIT_FILE))
+verbose_ggsave(g_model_fit, fit_output_file)
 
 #' Visualise the posterior distribution on the R0-ratio
 source("src/within-host/dumper_helper.R")
@@ -24,6 +25,7 @@ params <- list(
 )
 r0_samples <- r0_ratios(fit, params)
 g_r0_vis <- plot_posterior_r0_ratios(r0_samples)
-verbose_ggsave(g_r0_vis, sprintf("%s/approx_r0_posterior.pdf", OUT_DIR))
+r0_vis_output_file <- gsub(".rds", ".pdf", gsub("fit", "approx_r0_posterior", FIT_FILE))
+verbose_ggsave(g_r0_vis, r0_vis_output_file)
 
     
