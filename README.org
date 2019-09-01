@@ -1,5 +1,5 @@
 * Competitive mixtures
-This repository contains the code pertaining to the model fitting in *PAPER_CITATION*
+This repository contains the code pertaining to the model fitting in [[https://aac.asm.org/content/62/11/e01081-18.abstract][Characterization of Influenza B Virus Variants with Reduced Neuraminidase Inhibitor Susceptibility]].
 ** Code structure
 The =main.R= script provides a convenient interface to the rest of the code.
 If you are only interested in using the existing code, you only need to learn how to run =main.R=.
