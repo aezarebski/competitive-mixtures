@@ -76,6 +76,12 @@ verbose_saveRDS <- function(object, file) {
         cat(sprintf("There is already a file: %s\n", file))
         stop()
     }
+
+    if (!dir.exists(dirname(file))) {
+        cat(sprintf("\n\n\nCannot find directory: %s\n\n\n", dirname(file)))
+        stop()
+    }
+
     cat(sprintf("Writing to file: %s\n", file))
     saveRDS(object, file = file)
 }
@@ -222,6 +228,12 @@ write_dump_file <- function(tcid_data, rna_data, pyro_data, col_names, output_fi
   
   
   dump_vars <- get_dump_vars()
+
+  if (!dir.exists(dirname(output_file))) {
+      cat(sprintf("\n\n\nCannot find directory: %s\n\n\n", dirname(output_file)))
+      stop()
+  }
+
   cat(sprintf("\nWriting the dump data to %s\n", output_file))
   stan_rdump(dump_vars, file = output_file)
 }

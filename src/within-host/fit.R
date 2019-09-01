@@ -90,6 +90,12 @@ ic_from_fit <- function(fit, num_pure_ferrets, num_mix) {
 
 petrie_stanmodel <- stan_model(MODEL_FILE)
 if (IC_FILE != "NA") {
+
+    if (!file.exists(IC_FILE)) {
+        cat(sprintf("\n\n\nCannot find initial condition file: %s\n\n\n", IC_FILE))
+        stop()
+    }
+
     initial_opt_condition <- IC_FILE %>%
         readRDS() %>%
         ic_from_fit(num_pure_wild + num_pure_mutant, num_mix)
@@ -103,4 +109,11 @@ fit <- optimizing(
     as_vector = FALSE,
     hessian = TRUE
 )
+
+if (!dir.exists(dirname(OUT_FILE))) {
+    cat(sprintf("\n\n\nCannot find directory: %s\n\n\n", dirname(file)))
+    stop()
+}
+
+
 saveRDS(fit, file = OUT_FILE)
