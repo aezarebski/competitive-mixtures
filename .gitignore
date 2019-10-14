@@ -2,3 +2,4 @@ out/
 src/between-host/mccaw.rds
 src/within-host/petrie.rds
 
+packrat/lib*/
