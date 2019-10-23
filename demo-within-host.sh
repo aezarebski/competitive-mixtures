@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 XLSX_FILE=in/demo.xlsx
 DUMP_FILE=out/demo/demo.dump
@@ -6,6 +6,13 @@ MODEL_FILE=src/within-host/petrie.stan
 OUTPUT_FILE=out/demo/fit.rds
 OUTPUT_DIR=out/demo
 echo "Running the demonstration code for the within-host model"
+
+# If the output directory is missing then exit early with a message.
+if [ ! -d $OUTPUT_DIR ]; then
+    echo "ERROR: Could not find output directory: $OUTPUT_DIR"
+    exit 1
+fi
+
 echo "Pre-processing data"
 Rscript main.R --within_dump --xlsx $XLSX_FILE --dump $DUMP_FILE --relax 1
 echo "Running the fit"
