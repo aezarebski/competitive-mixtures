@@ -10,6 +10,12 @@ library(dplyr)
 library(rstan)
 rstan_options(auto_write = TRUE)
 
+if (!file.exists(DUMP_FILE)) {
+    cat(sprintf("\n\nTrying to exist a non-exiting dump file:  %s\n\n", DUMP_FILE))
+    stop()
+}
+
+cat(sprintf("\n\nObtaining the data for the Stan model from: %s\n\n", DUMP_FILE))
 source(DUMP_FILE)
 
 
@@ -87,33 +93,49 @@ ic_from_fit <- function(fit, num_pure_ferrets, num_mix) {
     )
 }
 
+main <- function() {
+    petrie_stanmodel <- stan_model(MODEL_FILE)
 
-petrie_stanmodel <- stan_model(MODEL_FILE)
-if (IC_FILE != "NA") {
+    if ((!is.na(IC_FILE)) && (IC_FILE != "NA")) {
+        cat("\n\nAttempting to run a within-host fit with an initial condition file.\n\n")
 
-    if (!file.exists(IC_FILE)) {
-        cat(sprintf("\n\n\nCannot find initial condition file: %s\n\n\n", IC_FILE))
+        if (!file.exists(IC_FILE)) {
+            cat(sprintf("\n\n\nCannot find initial condition file: %s\n\n\n", IC_FILE))
+            stop()
+        }
+
+        initial_opt_condition <- IC_FILE %>%
+            readRDS() %>%
+            ic_from_fit(num_pure_wild + num_pure_mutant, num_mix)
+    } else {
+        cat("\n\nUsing a random initial condition chosen by stan.\n\n")
+        initial_opt_condition <- 'random'  # Default value.
+    }
+
+    if (!exists("init_target_cells")) {
+        cat(sprintf("\n\n\nCannot find the init_target_cells in the current environment.\n\n\n", IC_FILE))
+        stop()
+    } else {
+        cat(sprintf("\n\n\nFound the init_target_cells in the current environment.\n\n\n", IC_FILE))
+    }
+
+    fit <- optimizing(
+        petrie_stanmodel,
+        data = .GlobalEnv,
+        init = initial_opt_condition,
+        verbose = TRUE,
+        as_vector = FALSE,
+        hessian = TRUE
+    )
+
+    if (!dir.exists(dirname(OUT_FILE))) {
+        cat(sprintf("\n\n\nCannot find directory: %s\n\n\n", dirname(OUT_FILE)))
         stop()
     }
 
-    initial_opt_condition <- IC_FILE %>%
-        readRDS() %>%
-        ic_from_fit(num_pure_wild + num_pure_mutant, num_mix)
-} else {
-    initial_opt_condition <- 'random'  # Default value.
-}
-fit <- optimizing(
-    petrie_stanmodel,
-    init = initial_opt_condition,
-    verbose = TRUE,
-    as_vector = FALSE,
-    hessian = TRUE
-)
 
-if (!dir.exists(dirname(OUT_FILE))) {
-    cat(sprintf("\n\n\nCannot find directory: %s\n\n\n", dirname(file)))
-    stop()
+    saveRDS(fit, file = OUT_FILE)
 }
 
 
-saveRDS(fit, file = OUT_FILE)
+main()
