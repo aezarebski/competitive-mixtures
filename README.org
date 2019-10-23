@@ -13,9 +13,6 @@ There are some example shell script showing how to run an analysis.
 The input data for these computations is in the =in= directory and is part of the repository.
 The output of these computations will appear in the =out= directory which is ignored by git.
 ** Requirements
-This code works with =rstan_2.17.2= and possibly later versions too.
-Note that the part of the post-processing for the within-host model relies on functions in the Rstan interface that appears in version 2.17.0.
-However, you should still be able to fit the within-host model with earlier versions.
 *** Packrat
 [[https://CRAN.R-project.org/package=packrat][packrat]] is used to manage the packages used.
 When you run =R= you should see the following message
