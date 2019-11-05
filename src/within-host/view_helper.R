@@ -38,6 +38,11 @@ observations_as_df <- function(obs) {
         melt(id.vars = c("ferret_num", "obs_num"))
 }
 
+#' Plot of all of the ferrets as a facet grid
+#'
+#' @param model_solution_array an array containing the fitted solution
+#' @param observations_array an array containing the observed values
+#'
 plot_model_solution <- function(model_solution_array, observations_array) {
     ms_plot_df <- model_solution_as_df(model_solution_array)
     obs_plot_df <- observations_as_df(observations_array)
@@ -51,6 +56,31 @@ plot_model_solution <- function(model_solution_array, observations_array) {
         )
 }
 
+
+#' A list of the plots for each ferret as an individual figure.
+#'
+#' @param model_solution_array an array containing the fitted solution
+#' @param observations_array an array containing the observed values
+#'
+plot_model_solutions_as_list <- function(model_solution_array, observations_array) {
+    ms_plot_df <- model_solution_as_df(model_solution_array)
+    ferret_numbers <- unique(ms_plot_df$ferret_num)
+    obs_plot_df <- observations_as_df(observations_array)
+    single_ferret_fig <- function(fn) {
+        fig <- ggplot(mapping = aes(x = obs_num, y = value)) +
+            geom_line(data = ms_plot_df[ms_plot_df$ferret_num == fn,], colour = "blue") +
+            geom_point(data = obs_plot_df[obs_plot_df$ferret_num == fn,], colour = "red") +
+            facet_wrap(~variable) +
+            labs(
+                x = "Day",
+                y = "Observed value"
+            ) +
+            ggtitle(sprintf("Ferret number: %d", fn))
+        fig_num <- fn
+        return(list(fig = fig, fig_num = fig_num))
+    }
+    lapply(ferret_numbers, single_ferret_fig)
+}
 
 #' Based on the facetted figure create single visualisation for each of the
 #' ferrets and save it to a file in the out put directory.

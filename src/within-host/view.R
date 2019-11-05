@@ -16,6 +16,12 @@ g_model_fit <- plot_model_solution(sol, obs_array)
 fit_output_file <- gsub(".rds", ".pdf", gsub("fit", "model-fit", FIT_FILE))
 verbose_ggsave(g_model_fit, fit_output_file)
 
+#' Visualise the model fit for each subject
+single_fits <- plot_model_solutions_as_list(sol, obs_array)
+for (ix in 1:length(single_fits)) {
+    verbose_ggsave(single_fits[[ix]]$fig, gsub(".rds", sprintf("-model-ferret-%d.pdf", single_fits[[ix]]$fig_num), FIT_FILE))
+}
+
 #' Visualise the posterior distribution on the R0-ratio
 source("src/within-host/dumper_helper.R")
 source(DUMP_FILE)

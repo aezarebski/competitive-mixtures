@@ -1,5 +1,5 @@
-library(rstan)
 library(dplyr)
+library(rstan)
 
 get_dump_vars <- function() {
     c(
@@ -243,11 +243,13 @@ write_dump_file <- function(tcid_data, rna_data, pyro_data, col_names, output_fi
 #'
 #' @param data_file the XLSX file
 #' @param sheet_name the name of the sheet "(TCID50|RealTime|PYRO)"
-read_sheet <- function(data_file, sheet_name) {
-    xlsx_sheet <- read.xlsx(
+#' @param row_numbers the rows to read from the sheet
+#'
+read_sheet <- function(data_file, sheet_name, row_numbers) {
+    xlsx_sheet <- xlsx::read.xlsx(
         data_file,
         sheetName = sheet_name,
-        rowIndex = c(1, 3:13)
+        rowIndex = c(1, row_numbers)
     )
     select(xlsx_sheet, matches("(Don|Rec)"))
 }
@@ -267,3 +269,39 @@ write_obs_array <- function(tcid_data, rna_data, pyro_data, output_file) {
     verbose_saveRDS(obs_array, file = output_file)
 }
 
+
+#' Return the data from a single sheet of the XLSX file as a transposed matrix.
+#'
+#' @param xlsx_file the XLSX file
+#' @param sheet_name the name of the sheet "(TCID50|RealTime|PYRO)"
+#'
+read_data <- function(xlsx_file, sheet_name) {
+    if (file.exists(xlsx_file)) {
+        row_numbers <- row_numbers_in_sheet(xlsx_file, sheet_name)
+    } else {
+        stop(sprintf("Could not find specified XLSX file: %s", xlsx_file))
+    }
+
+    if (sheet_name %in% c("TCID50","RealTime","PYRO")) {
+        ftm <- function(df) {
+            t(as.matrix(df))
+        }
+        return(ftm(read_sheet(xlsx_file, sheet_name, row_numbers)))
+    } else {
+        stop("Unrecognised sheet name in read_data function.")
+    }
+}
+
+
+#' Return the number of rows in the sheet
+#'
+#' @param xlsx_file the XLSX file
+#' @param sheet_name the name of the sheet "(TCID50|RealTime|PYRO)"
+#'
+row_numbers_in_sheet <- function(xlsx_file, sheet_name) {
+    x <- xlsx::read.xlsx2(file=xlsx_file, sheetName=sheet_name)
+    mask <- as.character(x[,1]) != ""
+    tmp <- 1:length(as.character(x[,1]))
+    cat(sprintf("\nThere appear to be %d measurements in the %s sheet of the %s file.\n", length(tmp[mask]), sheet_name, xlsx_file))
+    return(c(1,tmp[mask]+1))
+}
