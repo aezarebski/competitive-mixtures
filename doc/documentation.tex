@@ -2,6 +2,13 @@
  
 \begin{document}
 \section{Within-host model}
-Inference for the within-host model consists of finding the mode of the posterior distribution and the Hessian matrix at the mode.
-These are then used to approximate the posterior with a multivariate Gaussian distribution from which posterior samples can be obtained.
+Inference for the within-host model consists of finding the mode of the posterior distribution (i.e., the maximum a posteriori (MAP) estimate) and using a Laplace approximation.
+The approximation is primarily used to compute the distribution of the $R_0$ ratio.
+\subsection{Data}
+In the \verb=d197n.xlsx= file there are four sheets: the first three describing experimental observations and the fourth error codes and units.
+The \verb=PYRO= sheet is particularly important.
+The values in the \verb=PYRO= sheet are given as percentages, not proportions.
+The percentage indicates the percentage of the variant type.
+For example, in the measurement on day 2, the ferret \verb=0W100VDon-F1= has a value of 98.5.
+Negative values are reserved for error codes.
 \end{document}
