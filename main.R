@@ -1,6 +1,7 @@
 library(optparse)
+library(futile.logger)
 set.seed(1)
-
+flog.appender(appender.tee("competitive-mixtures.log"))
 
 #' Return a logical option for parsing command line arguments.
 #'
@@ -102,10 +103,13 @@ get_args <- function() {
 
 
 main <- function() {
+    flog.debug("Running main")
     args <- get_args()
     if (args$within_dump) {
+        flog.info("Running within-host dumper")
         dump_env <- new.env()
         dump_env$DATA_FILE <- args$xlsx
+        flog.info(sprintf("Input data file: %s", args$xlsx))
         dump_env$DUMP_FILE <- args$dump
         dump_env$RELAX_FACT <- args$relax
         source("src/within-host/dumper.R", local = dump_env)

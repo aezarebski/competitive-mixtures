@@ -73,12 +73,12 @@ observations_as_dataframe <- function(observation_array, obs_ix, ferret_ids) {
 #' @param file the file to write to.
 verbose_saveRDS <- function(object, file) {
     if (file.exists(file)) {
-        cat(sprintf("There is already a file: %s\n", file))
+        flog.error(sprintf("There is already a file: %s\n", file))
         stop()
     }
 
     if (!dir.exists(dirname(file))) {
-        cat(sprintf("\n\n\nCannot find directory: %s\n\n\n", dirname(file)))
+        flog.error(sprintf("\n\n\nCannot find directory: %s\n\n\n", dirname(file)))
         stop()
     }
 
@@ -97,8 +97,10 @@ verbose_saveRDS <- function(object, file) {
 #' @param output_file is the file to write the data to
 #' @param relaxation is the amount to multiply the observation sigmas by.
 write_dump_file <- function(tcid_data, rna_data, pyro_data, col_names, output_file, relaxation=1) {
-  num_ferrets <- dim(tcid_data)[1]
-  num_days <- dim(tcid_data)[2]
+    flog.debug("Call to write_dump_file")
+    num_ferrets <- dim(tcid_data)[1]
+    num_days <- dim(tcid_data)[2]
+    flog.debug(sprintf("There are measurements for %d ferrets and %d days.", num_ferrets,num_days))
 
   #' Return the same matrix with the some of the rows left-shifted to account
   #' for a *SINGLE* missing observation at the start of the time series.
@@ -116,10 +118,13 @@ write_dump_file <- function(tcid_data, rna_data, pyro_data, col_names, output_fi
       }
       return(new_mat)
   }
-  
+
   is_wild <- grepl("100W", col_names)
-  is_mix <- grepl("W[2,5,8]{1}0V", col_names)
+  flog.info(sprintf("There are %d pure wild type ferrets", sum(is_wild)))
   is_mutant <- grepl("100V", col_names)
+  flog.info(sprintf("There are %d pure variant type ferrets", sum(is_mutant)))
+  is_mix <- !(is_wild | is_mutant)
+  flog.info(sprintf("There are %d mixture ferrets", sum(is_mix)))
   is_pure <- rep(NaN, num_ferrets)
   is_pure[is_wild] <- -1
   is_pure[is_mix] <- 0
@@ -128,14 +133,14 @@ write_dump_file <- function(tcid_data, rna_data, pyro_data, col_names, output_fi
   num_mix <- sum(is_pure == 0)
   num_pure_mutant <- sum(is_pure == 1)
   
-  init_target_cells <- 4E8
+    init_target_cells <- 4E8
+    flog.info(sprintf("There are initially %d target cells", init_target_cells))
   sigma_tcid <- 2 * relaxation
   sigma_rna <- 1 * relaxation
   sigma_pyro <- 0.1 * relaxation
   #' Define the missing value code and the observation censor value.
   tcid_missing_code <- -1
   tcid_censor_value <- 0.5
-
   #' If the TCID50 measurement has value -1 then this indicates that no
   #' measurement was taken because the ferret was unavailable. We need to create
   #' a vector for the number of observations available for each of the ferrets.
@@ -188,7 +193,7 @@ write_dump_file <- function(tcid_data, rna_data, pyro_data, col_names, output_fi
     rna_complete_ixs[ferret, 1:num_complete] <- (1:num_days)[temp_mask_complete]
     rna_ixs[ferret] <- num_complete
   }
-  
+
   pyro_missing_codes <- c(-3, -4)
   # CAREFUL: This line mutates the PYRO_DATA matrix
   pyro_data <- cycle_back_selected_rows(pyro_data)
@@ -302,6 +307,6 @@ row_numbers_in_sheet <- function(xlsx_file, sheet_name) {
     x <- xlsx::read.xlsx2(file=xlsx_file, sheetName=sheet_name)
     mask <- as.character(x[,1]) != ""
     tmp <- 1:length(as.character(x[,1]))
-    cat(sprintf("\nThere appear to be %d measurements in the %s sheet of the %s file.\n", length(tmp[mask]), sheet_name, xlsx_file))
+    flog.info(sprintf("There are measurements for %d days in sheet %s of the file %s.", length(tmp[mask]), sheet_name, xlsx_file))
     return(c(1,tmp[mask]+1))
 }

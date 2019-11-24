@@ -112,6 +112,22 @@ Source: CRAN
 Version: 0.4.0
 Hash: f147621f72b561485bfffcae78c4f5d5
 
+Package: formatR
+Source: CRAN
+Version: 1.7
+Hash: 60dec134ecd2fd23c658b8057c76317a
+
+Package: futile.logger
+Source: CRAN
+Version: 1.4.3
+Hash: d1cc6584b39f2c4cfbe377fd94cbdbaa
+Requires: futile.options, lambda.r
+
+Package: futile.options
+Source: CRAN
+Version: 1.0.1
+Hash: c5a7e0ce07509a8561881c8860270d71
+
 Package: getopt
 Source: CRAN
 Version: 1.20.3
@@ -149,6 +165,12 @@ Package: labeling
 Source: CRAN
 Version: 0.3
 Hash: ecf589b42cd284b03a4beb9665482d3e
+
+Package: lambda.r
+Source: CRAN
+Version: 1.2.4
+Hash: ee5a211007a3e55caafe1b90ab4b5093
+Requires: formatR
 
 Package: lattice
 Source: CRAN
