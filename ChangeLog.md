@@ -1,5 +1,9 @@
 # Changelog for competitive-mixtures
 
+## 2019-11-24 
+
+* Fix a bug where the error codes where mangled while reading in the pyrosequencing data in `src/within-host/dumper.R`.
+
 ## 2019-10-24
 
 * Clean up the dumping code so that it does not rely on hard-coded values for the number of days the experiment ran for.
