@@ -33,7 +33,7 @@ ferret <- function(params, protocol) {
 #' @return \code{IO} observations
 run_experiment <- function(params, protocol, observer) {
     hidden_state <- ferret(params, protocol)
-    observe_experiment(hidden_state, observer)
+    observe_ferret(hidden_state, observer)
 }
 
 #' Results of an experiment in a convenient format
