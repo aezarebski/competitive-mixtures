@@ -83,6 +83,11 @@ Source: CRAN
 Version: 1.3.4
 Hash: ff2840dd9b0d563fc80377a5a45510cd
 
+Package: deSolve
+Source: CRAN
+Version: 1.25
+Hash: 815e003a4d81d0cbeb11ae290ad78937
+
 Package: desc
 Source: CRAN
 Version: 1.2.0
