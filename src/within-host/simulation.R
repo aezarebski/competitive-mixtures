@@ -20,34 +20,35 @@ my_f_id <- "100W0VDon_F1"
 expect_that(my_f_id, is_a("character"))
 
 my_params <- list(
-    num_target_cells = 1e8,
-    v_tcid_a_0 = 1,
-    v_tcid_b_0 = 3,
-    rho_0 = 10,
-    beta_a = 1e-5,
-    k_a = 2,
-    delta_a = 1,
-    p_a = 1,
-    c_h_a = 1,
-    d_inf_a = 3.12,
-    xi_a = 10,
-    beta_b = 1e-5,
-    k_b = 2,
-    delta_b = 1,
-    p_b = 1,
-    c_h_b = 1,
-    d_inf_b = 3.12,
-    xi_b = 10
-    )
+  num_target_cells = 1e8,
+  v_tcid_a_0 = 1,
+  v_tcid_b_0 = 3,
+  rho_0 = 10,
+  beta_a = 1e-5,
+  k_a = 2,
+  delta_a = 1,
+  p_a = 1,
+  c_h_a = 1,
+  d_inf_a = 3.12,
+  xi_a = 10,
+  beta_b = 1e-5,
+  k_b = 2,
+  delta_b = 1,
+  p_b = 1,
+  c_h_b = 1,
+  d_inf_b = 3.12,
+  xi_b = 10
+)
 expect_that(my_params, is_a("list"))
 
 my_protocol <- list(num_observations = 4)
 expect_that(my_protocol, is_a("list"))
 
-my_observer <- list(sigma_tcid = 100,
-                    sigma_rna = 100,
-                    sigma_pyro = 0.1
-                    )
+my_observer <- list(
+  sigma_tcid = 100,
+  sigma_rna = 100,
+  sigma_pyro = 0.1
+)
 expect_that(my_observer, is_a("list"))
 
 
@@ -56,7 +57,7 @@ cat("Generating observations\n")
 
 my_obs <- run_experiment(my_params, my_protocol, my_observer)
 expect_that(my_obs, is_a("matrix"))
-expect_that(dim(my_obs), equals(c(my_protocol$num_observations,3)))
+expect_that(dim(my_obs), equals(c(my_protocol$num_observations, 3)))
 
 
 my_lab_book <- laboratory_book(list(list(my_f_id, my_obs)))

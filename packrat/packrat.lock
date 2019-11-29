@@ -1,6 +1,6 @@
 PackratFormat: 1.4
 PackratVersion: 0.5.0
-RVersion: 3.6.1
+RVersion: 3.5.3
 Repos: CRAN=https://cran.ma.imperial.ac.uk/
 
 Package: BH
@@ -282,6 +282,12 @@ Source: CRAN
 Version: 0.9-11
 Hash: 1d41abb8e4537cb281dd913f0d6f1e76
 
+Package: rematch2
+Source: CRAN
+Version: 2.1.0
+Hash: 81eaeddde6cbc03e7d074e96bff4b9d6
+Requires: tibble
+
 Package: reshape2
 Source: CRAN
 Version: 1.4.3
@@ -328,6 +334,13 @@ Version: 1.4.0
 Hash: 67da32dbb2a7a16f2ef124336358e54a
 Requires: glue, magrittr, stringi
 
+Package: styler
+Source: CRAN
+Version: 1.2.0
+Hash: 469aff75941534923f538809eb4ed8ef
+Requires: backports, cli, magrittr, purrr, rematch2, rlang, rprojroot,
+    tibble, withr, xfun
+
 Package: testthat
 Source: CRAN
 Version: 2.3.0
@@ -367,6 +380,11 @@ Package: withr
 Source: CRAN
 Version: 2.1.2
 Hash: d534108bcd5f34ec73e9eb523751ba20
+
+Package: xfun
+Source: CRAN
+Version: 0.11
+Hash: d9465c5b37edf541913d74968461fc61
 
 Package: xlsx
 Source: CRAN
