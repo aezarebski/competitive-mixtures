@@ -10,7 +10,10 @@ source("src/within-host/simulation_helper.R")
 #'   write_to_spreadsheet
 #'
 
+#' State a couple of expectations about the environment this code is running in.
 expect_that(basename(getwd()), equals("competitive-mixtures"))
+output_xlsx <- "out/simulation/demo-simulation.xlsx"
+expect_true(dir.exists(dirname(output_xlsx)))
 cat("Starting the simulation\n")
 
 my_f_id <- "100W0VDon_F1"
@@ -65,6 +68,5 @@ expect_that(my_lab_book[[1]], has_names(c("sheet", "values")))
 
 cat("Writing to XLSX\n")
 
-output_xlsx <- "out/simulation/demo-simulation.xlsx"
 write_to_spreadsheet(my_lab_book, output_xlsx)
 expect_that(file.exists(output_xlsx), is_true())
