@@ -1,6 +1,6 @@
 PackratFormat: 1.4
 PackratVersion: 0.5.0
-RVersion: 3.5.3
+RVersion: 3.6.2
 Repos: CRAN=https://cran.ma.imperial.ac.uk/
 
 Package: BH
@@ -38,7 +38,7 @@ Package: RcppEigen
 Source: CRAN
 Version: 0.3.3.5.0
 Hash: 5c644e0685d0737982a3d98b6b11c6bf
-Requires: Matrix, Rcpp
+Requires: Rcpp, Matrix
 
 Package: StanHeaders
 Source: CRAN
@@ -71,7 +71,7 @@ Package: cli
 Source: CRAN
 Version: 1.1.0
 Hash: bc4e54014c2049f2605ad0c3ba0cce6b
-Requires: assertthat, crayon
+Requires: assertthat, crayon, fansi, glue
 
 Package: colorspace
 Source: CRAN
@@ -99,13 +99,18 @@ Source: CRAN
 Version: 0.8.3
 Hash: 201287c2b23cff8b2ef156ec8b1e57f2
 Requires: BH, R6, Rcpp, assertthat, glue, magrittr, pkgconfig, plogr,
-    rlang, tibble, tidyselect
+    rlang, tidyselect, tibble
 
 Package: ellipsis
 Source: CRAN
 Version: 0.3.0
 Hash: 30b58109e4d7c6184a9c2e32f9ae38c6
 Requires: rlang
+
+Package: evaluate
+Source: CRAN
+Version: 0.14
+Hash: 18306cc3bc1aec7b7360eea8a0eb0ee1
 
 Package: fansi
 Source: CRAN
@@ -121,8 +126,8 @@ Package: ggplot2
 Source: CRAN
 Version: 3.2.1
 Hash: 7cf3f9df0089475f133ec23befca1032
-Requires: MASS, digest, gtable, lazyeval, mgcv, reshape2, rlang,
-    scales, tibble, viridisLite, withr
+Requires: MASS, digest, gtable, lazyeval, rlang, viridisLite, withr,
+    scales, mgcv, reshape2, tibble
 
 Package: glue
 Source: CRAN
@@ -164,7 +169,7 @@ Package: loo
 Source: CRAN
 Version: 2.1.0
 Hash: ad683221cdca221116f1811c58b1e124
-Requires: checkmate, matrixStats
+Requires: matrixStats, checkmate
 
 Package: magrittr
 Source: CRAN
@@ -209,18 +214,24 @@ Package: pillar
 Source: CRAN
 Version: 1.4.2
 Hash: 28ff1862b4e0c8761efca442e80a63d8
-Requires: cli, crayon, fansi, rlang, utf8, vctrs
+Requires: crayon, fansi, rlang, utf8, cli, vctrs
 
 Package: pkgbuild
 Source: CRAN
 Version: 1.0.6
 Hash: f41de345bf0dda984cce64a7ea668ea4
-Requires: R6, callr, cli, crayon, desc, prettyunits, rprojroot, withr
+Requires: R6, crayon, withr, rprojroot, cli, prettyunits, desc, callr
 
 Package: pkgconfig
 Source: CRAN
 Version: 2.0.3
 Hash: 5ff5f2361851a49534c96caa2a8071c7
+
+Package: pkgload
+Source: CRAN
+Version: 1.0.2
+Hash: 41eb2db35be61f6f9e8864cf87a1ecb0
+Requires: desc, pkgbuild, rlang, rprojroot, rstudioapi, withr
 
 Package: plogr
 Source: CRAN
@@ -232,6 +243,11 @@ Source: CRAN
 Version: 1.8.4
 Hash: 5c3737d7c1846e30d40c8c38110b5fcd
 Requires: Rcpp
+
+Package: praise
+Source: CRAN
+Version: 1.0.0
+Hash: 77da8f1df873a4b91e5c4a68fe2fb1b6
 
 Package: prettyunits
 Source: CRAN
@@ -282,14 +298,19 @@ Package: rstan
 Source: CRAN
 Version: 2.19.2
 Hash: e4f6f178c2775b2a264ad946308fcafe
-Requires: BH, Rcpp, RcppEigen, StanHeaders, ggplot2, gridExtra, inline,
-    loo, pkgbuild
+Requires: BH, Rcpp, StanHeaders, inline, gridExtra, loo, RcppEigen,
+    pkgbuild, ggplot2
+
+Package: rstudioapi
+Source: CRAN
+Version: 0.10
+Hash: 63f43c6ff14d92e1d65ca6c21d45a1eb
 
 Package: scales
 Source: CRAN
 Version: 1.0.0
 Hash: f4f1b13b6774ee3122a36466d1bc50b8
-Requires: R6, RColorBrewer, Rcpp, labeling, munsell, viridisLite
+Requires: R6, RColorBrewer, Rcpp, labeling, viridisLite, munsell
 
 Package: stringi
 Source: CRAN
@@ -302,17 +323,24 @@ Version: 1.4.0
 Hash: 67da32dbb2a7a16f2ef124336358e54a
 Requires: glue, magrittr, stringi
 
+Package: testthat
+Source: CRAN
+Version: 2.3.1
+Hash: 08a7645752835e2708c9bdf681409532
+Requires: R6, cli, crayon, digest, ellipsis, evaluate, magrittr,
+    pkgload, praise, rlang, withr
+
 Package: tibble
 Source: CRAN
 Version: 2.1.3
 Hash: f59680d81ddc45fa3fcb8c07686d1d89
-Requires: cli, crayon, fansi, pillar, pkgconfig, rlang
+Requires: crayon, fansi, pkgconfig, rlang, cli, pillar
 
 Package: tidyselect
 Source: CRAN
 Version: 0.2.5
 Hash: 9ab4ed03f4b7bbdbd1db9d7a920aae1a
-Requires: Rcpp, glue, purrr, rlang
+Requires: Rcpp, glue, rlang, purrr
 
 Package: utf8
 Source: CRAN
@@ -323,7 +351,7 @@ Package: vctrs
 Source: CRAN
 Version: 0.2.0
 Hash: daf77cb3dbcacd7fb619cb3748dc215f
-Requires: backports, digest, ellipsis, glue, rlang, zeallot
+Requires: backports, digest, glue, rlang, zeallot, ellipsis
 
 Package: viridisLite
 Source: CRAN
