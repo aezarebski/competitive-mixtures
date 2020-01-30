@@ -70,7 +70,7 @@ plot_model_solutions_as_list <- function(model_solution_array, observations_arra
         fig <- ggplot(mapping = aes(x = obs_num, y = value)) +
             geom_line(data = ms_plot_df[ms_plot_df$ferret_num == fn,], colour = "blue") +
             geom_point(data = obs_plot_df[obs_plot_df$ferret_num == fn,], colour = "red") +
-            facet_wrap(~variable) +
+            facet_wrap(~variable, scale = "free_y") +
             labs(
                 x = "Day",
                 y = "Observed value"
@@ -80,36 +80,6 @@ plot_model_solutions_as_list <- function(model_solution_array, observations_arra
         return(list(fig = fig, fig_num = fig_num))
     }
     lapply(ferret_numbers, single_ferret_fig)
-}
-
-#' Based on the facetted figure create single visualisation for each of the
-#' ferrets and save it to a file in the out put directory.
-#'
-#' @param g_original a ggplot object from plot_model_solution
-#' @param out_dir the directory to write the visualisations to.
-plot_individual_solutions <- function(g_original, out_dir) {
-  gg_data <- ggplot_build(g_original)
-  fit_df <- gg_data$data[[1]]
-  data_df <- gg_data$data[[2]]
-  num_ferrets <- length(unique(data_df$PANEL)) / 3
-  
-  out_file <- function(ferret_num) {sprintf("%s/ferret_%d.pdf", out_dir, ferret_num)}
-  panel_mask <- function(df, ferret_num) {ceiling(as.integer(df$PANEL) / 3) == ferret_num}
-  
-  for (ferret_num in 1:num_ferrets) {
-    mod_frame <- fit_df[panel_mask(fit_df, ferret_num), c("x", "y", "PANEL")]
-    obs_frame <- data_df[panel_mask(data_df, ferret_num), c("x", "y", "PANEL")]
-    plot_df <- bind_rows(
-        mutate(mod_frame, type = "model"),
-        mutate(obs_frame, type = "data")) %>%
-        rename(variable = PANEL)
-    g <- ggplot(mapping = aes(x = x, y = y)) +
-        geom_line(data = filter(plot_df, type == "model")) +
-        geom_point(data = filter(plot_df, type == "data")) +
-        facet_wrap(~variable, scale = "free_y")
-    output_file <- out_file(ferret_num)
-    ggsave(output_file, g)
-  }
 }
 
 

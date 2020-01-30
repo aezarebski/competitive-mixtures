@@ -1,5 +1,9 @@
 # Changelog for competitive-mixtures
 
+## 2019-01-31
+
+* Fix the scales on the individual ferret fit visualisations so it is clearer.
+
 ## 2019-11-24 
 
 * Fix a bug where the error codes where mangled while reading in the pyrosequencing data in `src/within-host/dumper.R`.
