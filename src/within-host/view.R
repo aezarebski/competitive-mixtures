@@ -4,6 +4,7 @@
 #' FIT_FILE
 #' OUT_DIR
 #' MODEL_FILE
+#' POSTERIOR_SAMPLE_FILE
 #'
 
 source("src/within-host/view_helper.R")
@@ -34,4 +35,20 @@ g_r0_vis <- plot_posterior_r0_ratios(r0_samples)
 r0_vis_output_file <- gsub(".rds", ".pdf", gsub("fit", "approx_r0_posterior", FIT_FILE))
 verbose_ggsave(g_r0_vis, r0_vis_output_file)
 
-    
+#' Record a copy of some parameter samples from the approximate prior distribution.
+post_samples <- posterior_samples(fit, params)
+
+sample_as_df <- function(x, ix) {
+    x <- x$VRNA_0_mix %>%
+        as.data.frame %>%
+        rename(VRNA_0_A = V1, VRNA_0_B = V2)
+    x$mix_ferret_num <- 1:nrow(x)
+    x$ix <- ix
+    return(x)
+}
+
+#' 1. Zip the sampels with the integers.
+#' 2. Map the tuples through the as_df function.
+#' 3. Bind them into a data frame and serialise.
+
+## saveRDS(object = post_samples, file = "foobar.rds")
