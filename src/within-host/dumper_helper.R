@@ -254,8 +254,8 @@ read_sheet <- function(data_file, sheet_name, row_numbers) {
     data_file,
     sheetName = sheet_name,
     rowIndex = c(1, row_numbers)
-  )
-  select(xlsx_sheet, matches("(Don|Rec)"))
+    )
+  dplyr::select(xlsx_sheet, dplyr::matches("(Don|Rec)"))
 }
 
 #' Write the simulation data to a dump file meeting the requirements of `petrie2015.stan`.
@@ -320,12 +320,12 @@ row_numbers_in_sheet <- function(xlsx_file, sheet_name) {
 #' @note This does a check to make sure that the percentages sum to 100.
 #'
 parse_col_name <- function(col_name) {
-  wild_percentage <- as.numeric(str_extract(string = (str_extract(string = col_name, pattern = "([0-9]+)(W|WT)")), pattern = "[0-9]+"))
-  variant_percentage <- as.numeric(str_extract(string = (str_extract(string = col_name, pattern = "([0-9]+)V")), pattern = "[0-9]+"))
+  wild_percentage <- as.numeric(stringr::str_extract(string = (stringr::str_extract(string = col_name, pattern = "([0-9]+)(W|WT)")), pattern = "[0-9]+"))
+  variant_percentage <- as.numeric(stringr::str_extract(string = (stringr::str_extract(string = col_name, pattern = "([0-9]+)V")), pattern = "[0-9]+"))
   expect_equal(wild_percentage + variant_percentage, 100)
   list(
-    observable = str_extract(string = col_name, pattern = "(TCID50|PYRO|RT)"),
+    observable = stringr::str_extract(string = col_name, pattern = "(TCID50|PYRO|RT)"),
     prop_wild = wild_percentage / 100,
-    donor_status = str_extract(string = col_name, pattern = "(Don|Rec)")
+    donor_status = stringr::str_extract(string = col_name, pattern = "(Don|Rec)")
   )
 }
