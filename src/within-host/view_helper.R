@@ -129,6 +129,7 @@ just_theta <- function(constr_samples) {
 #'
 #' @param uncon_samples is a matrix of unconstrained parameter samples
 #' @param sf_obj is a `stanfit` object for the petrie model
+#'
 constrained_samples <- function(uncon_samples, sf_obj) {
     transform_samples <- function(uc_pars) {
         constrain_pars(sf_obj, uc_pars)
@@ -142,6 +143,7 @@ constrained_samples <- function(uncon_samples, sf_obj) {
 #' @param fit is an instance of the returned value from `rstan::optimizing`.
 #' @param num_samples is the number of samples to generate
 #' @param sf_obj is a `stanfit` object for the petrie model
+#'
 unconstrained_samples <- function(fit, num_samples, sf_obj) {
     uc_mean <- unconstrain_pars(sf_obj, fit$par)
     cat(sprintf("\n\tThe length of the mean vector is %d\n\n", length(uc_mean)))
@@ -157,14 +159,25 @@ unconstrained_samples <- function(fit, num_samples, sf_obj) {
 }
 
 
+#' Return a list of posterior samples.
+#'
+#' @param fit is an instance of the returned value from `rstan::optimizing`.
+#' @param params is a list of implementation specifics
+#'
+posterior_samples <- function(fit, params) {
+    fit %>%
+        unconstrained_samples(params$num_samples, params$sf_obj) %>%
+        constrained_samples(params$sf_obj)
+}
+
+
 #' Return a vector of R_0 ratios from an approximate posterior.
 #'
 #' @param fit is an instance of the returned value from `rstan::optimizing`.
 #' @param params is a list of implementation specifics
+#'
 r0_ratios <- function(fit, params) {
-    fit %>%
-        unconstrained_samples(params$num_samples, params$sf_obj) %>%
-        constrained_samples(params$sf_obj) %>%
+    posterior_samples(fit, params) %>%
         just_theta() %>%
         ln_r0_ratio_samples() %>%
         exp()
