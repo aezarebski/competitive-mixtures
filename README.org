@@ -23,4 +23,4 @@ Packrat mode on. Using library in directory:
 #+end_src 
 
 This means that =R= has detected that you are trying to use =packrat=.
-Run the command =packrat::restor()= to install the required packages, and then =packrat::status()= to check that it worked correctly.
+Run the command =packrat::restore()= to install the required packages, and then =packrat::status()= to check that it worked correctly.
