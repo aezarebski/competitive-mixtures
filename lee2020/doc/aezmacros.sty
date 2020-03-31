@@ -1,0 +1,43 @@
+\ProvidesPackage{aezmacros}[2019/10/25 v0.4.2 Some macros from aez]
+
+\RequirePackage{xcolor}
+\RequirePackage{newverbs}
+
+%% \newcommand{\name}[num]{definition}
+
+%% ============================================================================
+%%  For use in technical writing
+%% ============================================================================
+
+\newcommand{\etal}{\emph{et al}~}
+\newcommand{\se}{\S}
+
+\newverbcommand{\bverb}
+  {\begin{lrbox}{\verbbox}}
+  {\end{lrbox}\colorbox{cyan!10}{\box\verbbox}}
+
+
+%% ============================================================================
+%% For use in mathematical environments.
+%% ============================================================================
+
+\newcommand{\bmath}[1]{\colorbox{green!10}{$ #1 $}}
+
+\newcommand{\abs}{\text{abs}}
+
+\newcommand{\condprob}[2]{\text{P}\left( #1 | #2 \right)}
+\newcommand{\poisson}[1]{\text{Poisson} \left( #1 \right)}
+\newcommand{\prob}[1]{\text{P}\left( #1 \right)}
+
+
+%% ============================================================================
+%% For use in describing a sequence of events.
+%% ============================================================================
+
+%% Create an entry of a time line \timelineevent{1991}{The beginning...}
+%%
+%% See demo.tex for an example of the usage of this function.
+%%
+\newcommand\timelineevent[2]{
+  \parbox[b]{2.5cm}{\hfill{\color{cyan}\bfseries\sffamily #1}~$\cdots\cdots$~}\makebox[0pt][c]{$\bullet$}\vrule\quad \parbox[c]{8cm}{\vspace{7pt}\color{red!40!black!80}\raggedright\sffamily #2.\\[7pt]}\\[-3pt]
+}

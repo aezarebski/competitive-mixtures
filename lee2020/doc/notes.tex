@@ -1,0 +1,196 @@
+\documentclass{article}
+
+\usepackage{graphicx}
+\graphicspath{ {./img/} }
+\usepackage{amsmath}
+\usepackage{aezmacros}
+
+% ============================================================================= 
+% This is the configuration of the listings for Haskell
+% =============================================================================
+\usepackage[font=sf,margin={0.5cm,0.5cm}]{caption}
+
+\definecolor{codebackground}{RGB}{255,255,224}
+\definecolor{codedeepblue}{RGB}{0,0,200}
+\definecolor{codedeepgreen}{RGB}{0,200,0}
+\usepackage{listings}
+\lstset{ 
+  backgroundcolor=\color{codebackground},
+  basicstyle=\small\ttfamily,
+  extendedchars=true,
+  frame=single,
+  keepspaces=true,
+  keywordstyle=\color{codedeepblue},
+  language=Haskell,
+  linewidth=14.0cm,
+  numbers=none,
+  showstringspaces=false,
+  stringstyle=\color{codedeepgreen},
+  tabsize=2,
+  title=\lstname,
+  xleftmargin=0.5cm
+}
+% =============================================================================
+
+\title{Model from Petrie \emph{et al} (2015)}
+\date{}
+\author{Alexander E. Zarebski}
+
+\begin{document}
+
+\maketitle
+
+\begin{itemize}
+\item 
+\item 
+\item 
+\item 
+\end{itemize}
+
+\section{Mathematical and computational model}
+There are viral species \(A\) and \(B\). Each species has 7 rate parameters. The
+rate parameters of the model are represented by the vector \(\theta\).
+
+\begin{equation}
+  \theta = (\beta_A,\beta_B,k_A,k_B,\delta_A,\delta_B,p_A,p_B,c_A,c_B,d_A,d_B,\xi_A,\xi_B)
+\end{equation}
+
+We can model this with the following type
+
+\begin{lstlisting}[caption={Give me a real caption}, label=parameterTypeDefn]
+type Rate = Double
+
+type RateParameters
+   = ( Rate
+     , Rate
+     , Rate
+     , Rate
+     , Rate
+     , Rate
+     , Rate
+     , Rate
+     , Rate
+     , Rate
+     , Rate
+     , Rate
+     , Rate
+     , Rate)
+\end{lstlisting}
+
+Host cells can be in 5 states: \(T\), \(L_i\) and \(I_i\) for \(i=A,B\). The
+state of the host system is represented by the vector \(\mathcal{H}\).
+
+\begin{equation}
+  \mathcal{H} = (T,L_A,L_B,I_A,I_B)
+\end{equation}
+
+The initial condition is known: \(T_0 = 7\times 10^7\) with no latent of
+infectious cells. We can model the host state with the following type
+
+\begin{lstlisting}[caption={Give me a real caption}, label=parameterHostDefn]
+type HostState = [Double]
+\end{lstlisting}
+
+Viral material consists of 4 types: \(V^{TCID}_A\), \(V^{TCID}_B\),
+\(V^{RNA}_A\), and \(V^{RNA}_B\). The differential of this system is shown in
+the following equations
+
+\begin{equation}
+  \begin{aligned}
+    \frac{dT}{dt} &= -\beta_A T V^{TCID}_A -\beta_B T V^{TCID}_B \\
+    \frac{dL_A}{dt} &= \beta_A T V^{TCID}_A -k_A L_A \\
+    \frac{dL_B}{dt} &= \beta_B T V^{TCID}_B -k_B L_B \\
+    \frac{dI_A}{dt} &= k_A L_A -\delta_A I_A \\
+    \frac{dI_B}{dt} &= k_B L_B -\delta_B I_B 
+  \end{aligned}
+\end{equation}
+
+The state of the viral system is represented by the vector \(\mathcal{V}\)
+
+\begin{equation}
+  \mathcal{V} = (V^{TCID}_A,V^{TCID}_B,V^{RNA}_A,V^{RNA}_B)
+\end{equation}
+
+The initial condition is unknown and must be estimated from the data and prior
+knowledge of the experimental set up. We represent the intial condition with the
+following vector, \(\psi\) to reduce the impact of correlations between the
+parameters.
+
+\begin{equation}
+  \psi = (V^{TCID}_{comb},V^{RNA}_{comb}/V^{TCID}_{comb},V^{TCID}_b/V^{TCID}_{comb},V^{RNA}_b/V^{RNA}_{comb})
+\end{equation}
+
+We can model the viral state with the following type
+
+\begin{lstlisting}[caption={Give me a real caption}, label=parameterViralDefn]
+type ViralState = [Double]
+\end{lstlisting}
+
+The differential of this system is shown in the following equations
+
+\begin{equation}
+  \begin{aligned}
+    \frac{dV^{TCID}_A}{dt} &= p_A I_A - c_A V^{TCID}_A - d_A V^{TCID}_A \\
+    \frac{dV^{TCID}_B}{dt} &= p_B I_B - c_B V^{TCID}_B - d_B V^{TCID}_B \\
+    \frac{dV^{RNA}_A}{dt} &= \xi_A p_A I_A - c_A V^{RNA}_A \\
+    \frac{dV^{RNA}_B}{dt} &= \xi_B p_B I_B - c_B V^{RNA}_B 
+  \end{aligned}
+\end{equation}
+
+The ODE system depends on the \lstinline|RateParameters|, the \lstinline|Time|
+and bothe the \lstinline|HostState| and \lstinline|ViralState| which we combine
+into a single \lstinline|HostViralState|.
+
+\begin{lstlisting}[caption={Give me a real caption}, label=differentialDefn]
+type Time = Double
+
+type HostViralState = [Double]
+
+odeDifferential :: RateParameters -> Time -> HostViralState -> [Double]
+odeDifferential (betaA, betaB, kA, kB, deltaA, deltaB, pA, pB, cA, cB, dA, dB, xiA, xiB) _ [hT, hLA, hLB, hIA, hIB, vTCIDA, vTCIDB, vRNAA, vRNAB] =
+  [ -betaA * hT * vTCIDA - betaB * hT * vTCIDB
+  , betaA * hT * vTCIDA - kA * hLA
+  , betaB * hT * vTCIDB - kB * hLB
+  , kA * hLA - deltaA * hIA
+  , kB * hLB - deltaB * hIB
+  , pA * hIA - cA * vTCIDA - dA * vTCIDA
+  , pB * hIB - cB * vTCIDB - dB * vTCIDB
+  , xiA * pA * hIA - cA * vRNAA
+  , xiB * pB * hIB - cB * vRNAB
+  ]
+\end{lstlisting}
+
+As an example of how this can all be put together, consider the following function
+
+\begin{lstlisting}[caption={Give me a real caption}, label=mainFunc1]
+main :: IO ()
+main = let ts = linspace 100 (0, 10) :: Vector Time
+           initState = [7e7,1,1,1,1,1,1,1,1] :: HostViralState
+           params = (1.0e-6,1.0e-6,
+                     10.0,10.0,
+                     1.0,1.0,
+                     1.0,1.0,
+                     1.0,1.0,
+                     3.12,3.12,
+                     1.0,1.0) :: RateParameters
+           solMatrix = odeSolve (odeDifferential params) initState ts
+           outputFile = "foobar.ssv"
+        in saveMatrix outputFile "%.3e" solMatrix
+\end{lstlisting}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=.7\linewidth]{host-fig}
+  \caption{Here is a caption}
+  \label{fig:host-fig}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=.7\linewidth]{virus-fig}
+  \caption{Here is a caption}
+  \label{fig:virus-fig}
+\end{figure}
+
+
+\end{document}
